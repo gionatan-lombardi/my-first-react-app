@@ -1,12 +1,12 @@
 import React from 'react'
 
-class Product extends React.Component {
-  text() {
-    return `${this.props.name} - €${this.props.price}`
-  }
-  render() {
-    return <li>{this.text()}</li>;
-  }
+function Product(props) {
+  return (
+    <li key={props.name + props.id}>
+      <span>{ props.name} - Qty: { props.quantity} - Notes: { props.notes }</span>
+      <button type="button" onClick={props.remove}>X</button>
+    </li>
+  )
 }
 
 export default Product
