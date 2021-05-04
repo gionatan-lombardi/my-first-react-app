@@ -1,33 +1,17 @@
-.App {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+@font-face {
+  font-family: TUIType;
+  src: url('https://assets.musement.com/fonts/TUIType.woff') format('woff');
 }
-
-.App-header {
-  background-color: #282c34;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  color: white;
+@font-face {
+  font-family: TUITypeLtBd;
+  src: url('https://assets.musement.com/fonts/TUITypeLtBd.woff') format('woff');
 }
-
-.App-header img {
-  width: 80px;
+@font-face {
+  font-family: TUITypeLt;
+  src: url('https://assets.musement.com/fonts/TUITypeLt.woff') format('woff');
 }
-
-.App-footer {
-  background-color: #ccc;
-  height: 60px;
-  margin-top: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-
-.App-footer img {
-  width: 200px;
-}
-

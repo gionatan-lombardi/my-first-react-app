@@ -1,39 +1,62 @@
-import { useState } from 'react';
-
-import logo from './logo.svg';
-import LogoImg from './components/LogoImg';
-import ProductAdder from './components/ProductAdder'
-import Product from './components/Product';
-import Counter from './components/Counter';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
+import axios from "axios"
 import './App.css';
+import HomePage from './pages/HomePage'
+import DestinationPage from './pages/DestinationPage'
+import ActivityPage from './pages/ActivityPage'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import { loadI18nBundle } from './store/action'
+import { I18N_MODULE_NAMESPACE } from './utils/translations'
 
 function App() {
-  const [ products, setProducts ] = useState([])
+  const dispatch = useDispatch()
+  const lang = useSelector(state => state.language)
 
-  function removeProduct(id) {
-    setProducts(products.filter(p => p.id !== id ))
-  }
+  useEffect(() => {
+    async function fetchI18nTranslations() {
+      const response = await axios.get('i18n', {
+        baseURL: 'https://fe-apiproxy.musement.com/',
+        params: {
+          namespace: I18N_MODULE_NAMESPACE,
+          lang,
+        },
+      });
+      dispatch(loadI18nBundle(response.data)) 
+    }
+    fetchI18nTranslations()
+  }, [lang, dispatch])
+
+  const defaultPath = useSelector(state => state.path);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <LogoImg alternativeText="React Header Logo" imageSrc={logo} />
-      </header>
-      <main>
-        <ProductAdder addNewProduct={(newProduct) => setProducts([ newProduct, ...products ])} />
-        <ul>
-          { products.map((product) => <Product key={product.id} name={product.name} id={product.id} notes={product.notes} remove={() => removeProduct(product.id)} />) }
-        </ul>
-        <br />
-        <br />
-        <hr />
-        <br />
-        <br />
-        <Counter modalIsOpen={true} number={234} />
-        <Counter modalIsOpen={false} number={32} />
-      </main>
-      <footer className="App-footer"><LogoImg alternativeText="Edgemony Footer Logo" imageSrc="https://edgemony.com/wp-content/uploads/2020/03/cropped-Logo-edgemony_TeBIANCO-04.png" /> © { (new Date().getFullYear())}</footer>
-    </div>
+    <Router>
+      <div className="App">
+        <Header />
+        <Switch>
+          <Route path="/:lang/:destination/:activity">
+            <ActivityPage />
+          </Route>
+          <Route path="/:lang/:destination/">
+            <DestinationPage />
+          </Route>
+          <Route path="/:lang">
+            <HomePage />
+          </Route>
+          <Route path="/">
+            <Redirect to={defaultPath} />
+          </Route>
+        </Switch>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 
